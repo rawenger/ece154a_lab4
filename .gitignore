@@ -6,3 +6,9 @@
 # ModelSim Project Files
 lab4.mpf
 work
+
+# Lab report
+*.docx
+*.xlsx
+*.pdf
+
