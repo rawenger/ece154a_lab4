@@ -1,4 +1,8 @@
 # Sigasi Porject Files
 .library_mapping.xml
 .project
-.settings/*
+.settings
+
+# ModelSim Project Files
+lab4.mpf
+work
