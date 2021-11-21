@@ -80,7 +80,8 @@ module datapath(input clk, reset,
   // **PUT YOUR CODE HERE**
   wire [31:0] pcnext, pcnextbr, pcplus4, pcbranch;
   wire [4:0] writereg;
-  wire [31:0] signimm, signimmsh, zeroimm, extimm;
+  wire [31:0] signimm, signimmsh, zeroimm, immext;
+  
   wire [31:0] srca, srcb;
   wire [31:0] result;
   
@@ -103,9 +104,9 @@ module datapath(input clk, reset,
 
   // ALU logic
   ///////////MODIFIED///////////////
-  mux2to1 imm_sel(ext, {16'b0, instr[15:0]}, signimm, extimm);
+  mux2to1 imm_sel(ext, {16'b0, instr[15:0]}, signimm, immext);
   ////////END MODIFIED//////////////
-  mux2to1 srcb_sel(alusrc, writedata, extimm, srcb);
+  mux2to1 srcb_sel(alusrc, writedata, immext, srcb);
   alu alu(srca, srcb, alucontrol, aluout, zero);
 
 endmodule
