@@ -6,7 +6,8 @@
 * 
 * ori is implemented by setting alusrc to 1 and sending the
 * correct alucontrol signal to the ALU, which already contained 
-* OR functionality. 
+* OR functionality. The ext control is used to determine if an
+* immediate should be sign- or zero-extended
 */
 
 module main_decoder(
@@ -18,34 +19,37 @@ module main_decoder(
   output alusrc,
   output regdst, regwrite,
   output jump,
-  output[1:0] aluop
+  output[1:0] aluop,
+  /////////MODIFIED/////////
+  output ext, // sign or zero extend
+  ////////END MODIFIED//////
 );
 
 //////////MODIFIED///////////
-  reg[9:0] ctrl;
+  reg[10:0] ctrl;
   assign {regwrite, regdst, alusrc, branch,
-          memwrite, memtoreg, jump, aluop} = ctrl;
+          memwrite, memtoreg, jump, aluop, ext} = ctrl;
 
   always @(op) begin
     case(op)
       6'b000000:
-        ctrl <= 10'b1100000010; // R-type
+        ctrl <= 11'b1100000010x; // R-type
       6'b000010:
-        ctrl <= 10'b0000000100; // j
+        ctrl <= 11'b0000000100x; // j
       6'b000100:
-        ctrl <= 10'b0001000001; // beq
+        ctrl <= 11'b00010000011; // beq
       6'b000101:
-        ctrl <= 10'b0001100001; // bne
+        ctrl <= 11'b00011000011; // bne
       6'b001000:
-        ctrl <= 10'b1010000000; // addi
+        ctrl <= 11'b10100000001; // addi
       6'b001101:
-        ctrl <= 10'b1010000011; // ori
+        ctrl <= 11'b10100000110; // ori
       6'b100011:
-        ctrl <= 10'b1010001000; // lw
+        ctrl <= 11'b10100010001; // lw
       6'b101011:
-        ctrl <= 10'b0010010000; // sw
+        ctrl <= 11'b00100100001; // sw
       default:
-        ctrl <= 10'bxxxxxxxxxx; // illegal op
+        ctrl <= 11'bxxxxxxxxxxx; // illegal op
     endcase
   end
 /////////END MODIFIED//////////

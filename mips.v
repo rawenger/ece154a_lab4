@@ -10,16 +10,26 @@ module mips(input          clk, reset,
 
   wire        memtoreg, branch,
   pcsrc, zero,
-  alusrc, regdst, regwrite, jump;
+  alusrc, regdst, regwrite, jump, 
+  ///////////MODIFIED////////////
+  ext;
+  /////////END MODIFIED//////////
   wire [2:0]  alucontrol;
 
   controller c(instr[31:26], instr[5:0], zero,
     memtoreg, memwrite, pcsrc,
     alusrc, regdst, regwrite, jump,
-    alucontrol);
+    alucontrol,
+    ///////////MODIFIED///////////
+    ext
+    ////////END MODIFIED//////////
+    );
   datapath dp(clk, reset, memtoreg, pcsrc,
     alusrc, regdst, regwrite, jump,
     alucontrol,
+    ///////////MODIFIED///////////
+    ext,
+    ////////END MODIFIED//////////
     zero, pc, instr,
     aluout, writedata, readdata);
 endmodule
@@ -31,13 +41,21 @@ module controller(input[5:0] op, funct,
   output pcsrc, alusrc,
   output regdst, regwrite,
   output jump,
-  output [2:0] alucontrol
+  output [2:0] alucontrol,
+  output ext
 );
 
   // **PUT YOUR CODE HERE**
   wire[1:0] aluop;
   wire[1:0] branch;
-  main_decoder maindec(op, memtoreg, memwrite, branch, alusrc, regdst, regwrite, jump, aluop);
+  wire ext;
+  main_decoder maindec(op, memtoreg, memwrite,
+    branch, alusrc, regdst, regwrite,
+    jump, aluop,
+    /////////////MODIFIED/////////////
+    ext
+    ///////////END MODIFIED///////////
+  );
   alu_decoder aludec(funct, aluop, alucontrol);
   
   ////////////////MODIFIED////////////////
@@ -52,6 +70,7 @@ module datapath(input clk, reset,
   input alusrc, regdst,
   input regwrite, jump,
   input [2:0]  alucontrol,
+  input ext,
   output zero,
   output [31:0] pc,
   input [31:0] instr,
@@ -62,7 +81,7 @@ module datapath(input clk, reset,
   // **PUT YOUR CODE HERE**
   wire [31:0] pcnext, pcnextbr, pcplus4, pcbranch;
   wire [4:0] writereg;
-  wire [31:0] signimm, signimmsh;
+  wire [31:0] signimm, signimmsh, zeroimm, extimm;
   wire [31:0] srca, srcb;
   wire [31:0] result;
   
@@ -80,11 +99,14 @@ module datapath(input clk, reset,
                 writereg, result, srca, writedata);
   mux2to1 #(5) a3_sel(regdst, instr[20:16], instr[15:11],
                 writereg);
-  mux2to1 #(32) res_sel(memtoreg, aluout, readdata, result);
+  mux2to1 res_sel(memtoreg, aluout, readdata, result);
   signext16to32 signextimm(instr[15:0], signimm);
 
   // ALU logic
-  mux2to1 #(32) srcb_sel(alusrc, writedata, signimm, srcb);
+  ///////////MODIFIED///////////////
+  mux2to1 imm_sel(ext, {16'b0, instr[15:0]}, signimm, extimm);
+  ////////END MODIFIED//////////////
+  mux2to1 srcb_sel(alusrc, writedata, extimm, srcb);
   alu alu(srca, srcb, alucontrol, aluout, zero);
 
 endmodule
