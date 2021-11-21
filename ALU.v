@@ -52,7 +52,7 @@ module comparator(
     );
 //    assign y = a - b > 32'b1; for some reason this doesn't work...?
     wire [31:0] diff;
-    assign diff = a + (~b + 1);
+    assign diff = a + (~b + 1'b1);
     assign y = {30'b0, diff[31]};
 endmodule
 
