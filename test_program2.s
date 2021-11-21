@@ -9,9 +9,9 @@ main:
 	bne	$t3, $0, here		# taken
 	j	there	    # doesn't execute
 here:
-	sub	$t2, $t2, $t0		# $t2 = 0xffffffff
+	sub	$t2, $t2, $t0		# $t2 = 1
 	ori	$t0, $t0, 0xFF		# $t0 = 0x000080ff
 there:	
-	add	$t3, $t3, $t2		# $t3 = 0x00008002
-	sub	$t0, $t2, $t0		# $t0 = 1
-	sw	$t0, 82($t3)		# [0x00008054] = 1
+	add	$t3, $t3, $t2		# $t3 = 2
+	sub	$t0, $t2, $t0		# $t0 = 0xffff7f00
+	sw	$t0, 82($t3)		# [0x54] = 0xffff7f02
