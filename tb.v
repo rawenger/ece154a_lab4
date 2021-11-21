@@ -22,7 +22,7 @@ module tb();
         // check results for memfile 1
 //      if (dataadr===84 & writedata===7) begin
         // check results for memfile 2
-      if (dataadr === 'hffff7385 && writedata === 'hffff7233) begin
+      if (dataadr === 'h8054 && writedata === 1) begin
         $display("Simulation succeeded");
         $stop;
 //      end else if (dataadr !==80) begin
