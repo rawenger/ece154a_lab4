@@ -15,18 +15,14 @@ module tb();
   begin
     clk <= 1; # 5; clk <= 0; # 5;
   end
-  
+  // check results
   always @(negedge clk)
   begin
     if (memwrite) begin
-        // check results for memfile 1
-//      if (dataadr===84 & writedata===7) begin
-        // check results for memfile 2
-      if (dataadr === 'h8054 && writedata === 1) begin
+      if (dataadr===84 & writedata===7) begin
         $display("Simulation succeeded");
         $stop;
-//      end else if (dataadr !==80) begin
-      end else begin
+      end else if (dataadr !==80) begin
         $display("Simulation failed");
         $stop;
       end

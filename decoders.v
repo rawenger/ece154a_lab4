@@ -21,7 +21,7 @@ module main_decoder(
   output jump,
   output[1:0] aluop,
   /////////MODIFIED/////////
-  output ext, // sign or zero extend
+  output ext // sign or zero extend
   ////////END MODIFIED//////
 );
 
