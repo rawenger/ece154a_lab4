@@ -48,7 +48,6 @@ module controller(input[5:0] op, funct,
   // **PUT YOUR CODE HERE**
   wire[1:0] aluop;
   wire[1:0] branch;
-  wire ext;
   main_decoder maindec(op, memtoreg, memwrite,
     branch, alusrc, regdst, regwrite,
     jump, aluop,
