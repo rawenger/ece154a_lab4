@@ -71,7 +71,7 @@ module alu_decoder(input[5:0] funct,
         ctrl <= 3'b110; // sub for I-types (beq, bne)
       ///////////MODIFIED/////////////
       2'b11:
-        ctrl <= 3; // or for I-types
+        ctrl <= 3'b001; // or for I-types
       //////////END MODIFIED//////////
       default: // R-types 
       case (funct)
