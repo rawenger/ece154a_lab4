@@ -10,12 +10,11 @@ module regfile(input clk,
 );
 
   reg[31:0] registers[31:0];
-  assign registers[0] = 0;
 
-  assign rd1 = registers[a1];
-  assign rd2 = registers[a2];
-//  assign rd1 = (a1) ? registers[a1] : 0;
-//  assign rd2 = (a2) ? registers[a2] : 0;
+//  assign rd1 = registers[a1];
+//  assign rd2 = registers[a2];
+  assign rd1 = (a1) ? registers[a1] : 0;
+  assign rd2 = (a2) ? registers[a2] : 0;
 
   always @(posedge clk) begin
     if (we3)
@@ -45,12 +44,12 @@ module mux2to1#(parameter width=32)
 endmodule
 
 // left-shift by 2
-module sll2(input in[31:0], output out[31:0]);
+module sll2(input [31:0] in, output [31:0] out);
   assign out = in << 2;
 endmodule
 
 // sign extend 16-bit value to 32-bits
-module signext16to32(input in[15:0], output out[31:0]);
+module signext16to32(input [15:0] in, output [31:0] out);
   assign out = (in[15]) ? {16'hFFFF, in} : {16'h0000, in};
 endmodule
 
@@ -59,7 +58,7 @@ module DFF#(parameter width=32)
 (
     input clk, rst,
     input [width-1:0] d,
-    output [width-1:0] q 
+    output reg[width-1:0] q 
 );
   always @(posedge clk, posedge rst) begin
     if (rst)

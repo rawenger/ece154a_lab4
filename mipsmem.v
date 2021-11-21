@@ -9,7 +9,7 @@ module dmem(input clk, we,
   // **PUT YOUR CODE HERE**
   reg[31:0] RAM[63:0];
   assign rd = RAM[a[31:2]];
-  always_ff @(posedge clk) begin
+  always @(posedge clk) begin
     if (we)
       RAM[a[31:2]] = wd;
   end

@@ -1,8 +1,8 @@
 module tb();
-  logic clk;
-  logic reset;
-  logic [31:0] writedata, dataadr;
-  logic memwrite;
+  reg clk;
+  reg reset;
+  wire [31:0] writedata, dataadr;
+  wire memwrite;
   // instantiate device to be tested
   top dut (clk, reset, writedata, dataadr, memwrite);
   // initialize test

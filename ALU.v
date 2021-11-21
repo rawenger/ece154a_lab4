@@ -50,7 +50,10 @@ module comparator(
     input [31:0] a, b,
     output [31:0] y
     );
-    assign y = (a - b) > 32'b1;
+//    assign y = a - b > 32'b1; for some reason this doesn't work...?
+    wire [31:0] diff;
+    assign diff = a + (~b + 1);
+    assign y = {30'b0, diff[31]};
 endmodule
 
 module mux4to1#(parameter width=32)

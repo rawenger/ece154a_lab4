@@ -36,27 +36,30 @@ module alu_decoder(input[5:0] funct,
   output[2:0] alucontrol
 );
 
+  reg [2:0] ctrl;
+  assign alucontrol = ctrl;
+
   always @(aluop, funct) begin
     case (aluop)
       2'b00:
-        alucontrol <= 3'b010; // add for I-types
+        ctrl <= 3'b010; // add for I-types
       2'b01:
-        alucontrol <= 3'b110; // sub for I-types (beq)
+        ctrl <= 3'b110; // sub for I-types (beq)
 
-      default: // R-types
+      default: // R-types 
       case (funct)
         6'b100000:
-          alucontrol <= 3'b010; // add
+          ctrl <= 3'b010; // add
         6'b100010:
-          alucontrol <= 3'b110; // sub
+          ctrl <= 3'b110; // sub
         6'b100100:
-          alucontrol <= 3'b000; // and
+          ctrl <= 3'b000; // and
         6'b100101:
-          alucontrol <= 3'b001; // or
+          ctrl <= 3'b001; // or
         6'b101010:
-          alucontrol <= 3'b111; // slt
+          ctrl <= 3'b111; // slt
         default:
-          alucontrol <= 3'bxxx; // ???
+          ctrl <= 3'bxxx; // ???
       endcase
     endcase
   end

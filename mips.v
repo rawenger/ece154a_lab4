@@ -69,20 +69,20 @@ module datapath(input clk, reset,
   adder pcadd1(pc, 32'b100, pcplus4);
   sll2 immsh(signimm, signimmsh);
   adder pcadd2(pcplus4, signimmsh, pcbranch);
-  mux2to1 pcbrmux(pcplus4, pcbranch, pcsrc, pcnextbr);
-  mux2to1 pcmux(pcnextbr, {pcplus4[31:28], instr[25:0], 2'b00}, 
-                jump, pcnext);
+  mux2to1 pcbrmux(pcsrc, pcplus4, pcbranch, pcnextbr);
+  mux2to1 pcmux(jump, pcnextbr, {pcplus4[31:28], instr[25:0], 2'b00}, 
+                pcnext);
 
   // register file logic
   regfile regs(clk, regwrite, instr[25:21], instr[20:16],
                 writereg, result, srca, writedata);
-  mux2to1 #(5) a3_sel(instr[20:16], instr[15:11],
-                    regdst, writereg);
-  mux2to1 #(32) res_sel(aluout, readdata, memtoreg, result);
+  mux2to1 #(5) a3_sel(regdst, instr[20:16], instr[15:11],
+                writereg);
+  mux2to1 #(32) res_sel(memtoreg, aluout, readdata, result);
   signext16to32 signextimm(instr[15:0], signimm);
 
   // ALU logic
-  mux2to1 #(32) srcb_sel(writedata, signimm, alusrc, srcb);
+  mux2to1 #(32) srcb_sel(alusrc, writedata, signimm, srcb);
   alu alu(srca, srcb, alucontrol, aluout, zero);
 
 endmodule
