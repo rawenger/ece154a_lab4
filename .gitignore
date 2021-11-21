@@ -12,3 +12,4 @@ work
 *.xlsx
 *.pdf
 
+.DS_Store
