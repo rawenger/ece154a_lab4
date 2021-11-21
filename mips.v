@@ -36,11 +36,13 @@ module controller(input[5:0] op, funct,
 
   // **PUT YOUR CODE HERE**
   wire[1:0] aluop;
-  wire branch;
+  wire[1:0] branch;
   main_decoder maindec(op, memtoreg, memwrite, branch, alusrc, regdst, regwrite, jump, aluop);
   alu_decoder aludec(funct, aluop, alucontrol);
   
-  assign pcsrc = branch & zero;
+  ////////////////MODIFIED////////////////
+  assign pcsrc = branch[1] & (zero ^ branch[0]);
+  /////////////END MODIFIED///////////////
 
 endmodule
 
@@ -69,8 +71,8 @@ module datapath(input clk, reset,
   adder pcadd1(pc, 32'b100, pcplus4);
   sll2 immsh(signimm, signimmsh);
   adder pcadd2(pcplus4, signimmsh, pcbranch);
-  mux2to1 pcbrmux(pcsrc, pcplus4, pcbranch, pcnextbr);
-  mux2to1 pcmux(jump, pcnextbr, {pcplus4[31:28], instr[25:0], 2'b00}, 
+  mux2to1 pcbr_sel(pcsrc, pcplus4, pcbranch, pcnextbr);
+  mux2to1 pc_sel(jump, pcnextbr, {pcplus4[31:28], instr[25:0], 2'b00}, 
                 pcnext);
 
   // register file logic
